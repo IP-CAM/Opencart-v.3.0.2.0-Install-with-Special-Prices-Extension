@@ -60,11 +60,17 @@ class ControllerExtensionModuleSpecialPrices extends Controller {
   }
 
   public function specialPrices() {
-    // TODO add real data
-    $data = '';
+    $this->load->model('customer/customer');
+
+    if (isset($this->request->get['customer_id']) && ($this->request->server['REQUEST_METHOD'] != 'POST')) {
+      $customer_info = $this->model_customer_customer->getCustomer($this->request->get['customer_id']);
+    }
+
+    if (isset($customer_info)) {
+      $data['customer_full_name'] = $customer_info['firstname'] . ' ' . $customer_info['lastname'];
+    }
 
     $this->response->setOutput($this->load->view('extension/module/special_prices', $data));
-
   }
 
   protected function validate() {
