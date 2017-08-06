@@ -1,7 +1,46 @@
-<legend>Special price list for a costumer <b>({{ customer_full_name }})</b></legend>
-<div class="panel-content">
-    <label for="upload" class="btn btn-primary"><i class="fa fa-save"></i> Select (.csv) File</label>
-    <input id="upload" type="file" name="file-upload" accept="text/csv">
+<div id="special-products-list">
+    <legend>Special price list for a costumer <b>({{ customer_full_name }})</b></legend>
+    <div class="panel-content">
+        <label for="upload" class="btn btn-primary"><i class="fa fa-save"></i> Select (.csv) File</label>
+        <input id="upload" class="hidden" type="file" name="file-upload" accept="text/csv">
+    </div>
+    <br>
+    {% set latest_product = special_products|first %}
+    <span>Latest import: {{ latest_product.timestamp|date("Y-m-d G:i:s") }} by <b>{{ latest_product.uploaded_by }}</b></span>
+    <br>
+    <br>
+    <br>
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <td class="text-right">Product EAN Code</td>
+            <td class="text-right">Special Price (EUR)</td>
+            <td class="text-right">Date Added</td>
+            <td class="text-right">Action</td>
+        </tr>
+        </thead>
+        <tbody>
+        {% if special_products %}
+            {% for product in special_products %}
+                <tr>
+                    <td class="text-right">{{ product.product_id }}</td>
+                    <td class="text-right">{{ product.product_price }}</td>
+                    <td class="text-right">{{ product.timestamp|date("Y-m-d G:i:s") }}</td>
+                    <td class="text-right">
+                        <button class="delete-special-product btn btn-danger" data-product-id="{{ product.product_id }}"
+                                type="button"
+                                data-original-title="Delete"><i class="fa fa-trash-o"></i>
+                        </button>
+                    </td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td class="text-center" colspan="4">No products</td>
+            </tr>
+        {% endif %}
+        </tbody>
+    </table>
 </div>
 
 
@@ -10,14 +49,13 @@
     var buffer_size = 1024;
     var pending_content = '';
 
-    function readAndSendChunk()
-    {
+    function readAndSendChunk() {
         var reader = new FileReader();
         var file = $('#upload')[0].files[0];
-        reader.onloadend = function(evt){
+        reader.onloadend = function (evt) {
 
             //check for end of file
-            if(evt.loaded == 0) return;
+            if (evt.loaded == 0) return;
 
             //increse offset value
             reader_offset += evt.loaded;
@@ -26,7 +64,7 @@
             var last_line_end = evt.target.result.lastIndexOf('\n');
             var content = pending_content + evt.target.result.substring(0, last_line_end);
 
-            pending_content = evt.target.result.substring(last_line_end+1, evt.target.result.length);
+            pending_content = evt.target.result.substring(last_line_end + 1, evt.target.result.length);
 
             //upload data
             send(content);
@@ -35,28 +73,56 @@
         reader.readAsText(blob);
     }
 
+    function updateSpecialPriceList() {
+        $.ajax({
+            url: "index.php?route=extension/module/special_prices/specialPrices&user_token={{ user_token }}&customer_id={{ customer_id }}",
+            method: 'POST',
+        }).done(function (response) {
+            $('#special-products-list').html(response);
+        });
+    }
+
     /**
      * Call ajax
      */
-    function send(data_chank)
-    {
+    function send(data_chank) {
         $.ajax({
             url: "index.php?route=extension/module/special_prices/addProduct&user_token={{ user_token }}&customer_id={{ customer_id }}",
             method: 'POST',
             data: data_chank
-        }).done(function(response) {
-            console.log(response);
+        }).done(function (response) {
+            var result = jQuery.parseJSON(response);
+            if (result.status === "success") {
+                updateSpecialPriceList();
+            }
         });
     }
 
     /**
      * Events
      */
-    $(function(){
-        $('#upload').change(function(){
+    $(function () {
+        $('#upload').change(function () {
             reader_offset = 0;
             pending_content = '';
             readAndSendChunk();
         });
+
+        $('.delete-special-product').click(function (event) {
+            event.preventDefault();
+            productId = $(this).attr('data-product-id');
+
+            $.ajax({
+                url: "index.php?route=extension/module/special_prices/deleteProduct&user_token={{ user_token }}&product_id=" + productId + "&customer_id={{ customer_id }}",
+                method: 'POST'
+            }).done(function (response) {
+                var result = jQuery.parseJSON(response);
+                if (result.status === "success") {
+                    updateSpecialPriceList();
+                }
+            });
+
+        });
+
     });
 </script>
