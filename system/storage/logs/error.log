@@ -1,0 +1,35 @@
+2017-08-05 15:19:30 - PHP Warning:  mysqli::mysqli(): (HY000/2002): No such file or directory in /Users/armandas/Sites/orca/system/library/db/mysqli.php on line 7
+2017-08-05 15:19:30 - PHP Warning:  DB\MySQLi::__construct(): Couldn't fetch mysqli in /Users/armandas/Sites/orca/system/library/db/mysqli.php on line 10
+2017-08-05 15:19:30 - PHP Warning:  DB\MySQLi::__construct(): Couldn't fetch mysqli in /Users/armandas/Sites/orca/system/library/db/mysqli.php on line 10
+2017-08-05 15:19:30 - PHP Notice:  Undefined variable: mysql in /Users/armandas/Sites/orca/install/controller/install/step_3.php on line 280
+2017-08-05 15:19:30 - PHP Notice:  Trying to get property of non-object in /Users/armandas/Sites/orca/install/controller/install/step_3.php on line 280
+2017-08-05 15:20:02 - PHP Warning:  mysqli::mysqli(): (HY000/1045): Access denied for user 'admin'@'localhost' (using password: YES) in /Users/armandas/Sites/orca/system/library/db/mysqli.php on line 7
+2017-08-05 15:20:02 - PHP Warning:  DB\MySQLi::__construct(): Couldn't fetch mysqli in /Users/armandas/Sites/orca/system/library/db/mysqli.php on line 10
+2017-08-05 15:20:02 - PHP Warning:  DB\MySQLi::__construct(): Couldn't fetch mysqli in /Users/armandas/Sites/orca/system/library/db/mysqli.php on line 10
+2017-08-05 15:20:02 - PHP Notice:  Undefined variable: mysql in /Users/armandas/Sites/orca/install/controller/install/step_3.php on line 280
+2017-08-05 15:20:02 - PHP Notice:  Trying to get property of non-object in /Users/armandas/Sites/orca/install/controller/install/step_3.php on line 280
+2017-08-05 15:21:48 - PHP Warning:  mysqli::mysqli(): (HY000/1045): Access denied for user 'admin'@'localhost' (using password: YES) in /Users/armandas/Sites/orca/system/library/db/mysqli.php on line 7
+2017-08-05 15:21:48 - PHP Warning:  DB\MySQLi::__construct(): Couldn't fetch mysqli in /Users/armandas/Sites/orca/system/library/db/mysqli.php on line 10
+2017-08-05 15:21:48 - PHP Warning:  DB\MySQLi::__construct(): Couldn't fetch mysqli in /Users/armandas/Sites/orca/system/library/db/mysqli.php on line 10
+2017-08-05 15:21:48 - PHP Notice:  Undefined variable: mysql in /Users/armandas/Sites/orca/install/controller/install/step_3.php on line 280
+2017-08-05 15:21:48 - PHP Notice:  Trying to get property of non-object in /Users/armandas/Sites/orca/install/controller/install/step_3.php on line 280
+2017-08-05 15:21:56 - PHP Warning:  mysqli::mysqli(): (HY000/1049): Unknown database 'orca' in /Users/armandas/Sites/orca/system/library/db/mysqli.php on line 7
+2017-08-05 15:21:56 - PHP Warning:  DB\MySQLi::__construct(): Couldn't fetch mysqli in /Users/armandas/Sites/orca/system/library/db/mysqli.php on line 10
+2017-08-05 15:21:56 - PHP Warning:  DB\MySQLi::__construct(): Couldn't fetch mysqli in /Users/armandas/Sites/orca/system/library/db/mysqli.php on line 10
+2017-08-05 15:21:56 - PHP Notice:  Undefined variable: mysql in /Users/armandas/Sites/orca/install/controller/install/step_3.php on line 280
+2017-08-05 15:21:56 - PHP Notice:  Trying to get property of non-object in /Users/armandas/Sites/orca/install/controller/install/step_3.php on line 280
+2017-08-05 16:51:49 - PHP Warning:  mysqli::mysqli(): MySQL server has gone away in /Users/armandas/Sites/orca/system/library/db/mysqli.php on line 7
+2017-08-05 16:51:49 - PHP Warning:  mysqli::mysqli(): Error while reading greeting packet. PID=382 in /Users/armandas/Sites/orca/system/library/db/mysqli.php on line 7
+2017-08-05 16:51:49 - PHP Warning:  mysqli::mysqli(): (HY000/2006): MySQL server has gone away in /Users/armandas/Sites/orca/system/library/db/mysqli.php on line 7
+2017-08-05 16:51:49 - PHP Warning:  DB\MySQLi::__construct(): Couldn't fetch mysqli in /Users/armandas/Sites/orca/system/library/db/mysqli.php on line 10
+2017-08-05 16:51:49 - PHP Warning:  DB\MySQLi::__construct(): Couldn't fetch mysqli in /Users/armandas/Sites/orca/system/library/db/mysqli.php on line 10
+2017-08-06 10:10:22 - PHP Warning:  mysqli::mysqli(): MySQL server has gone away in /Users/armandas/Sites/orca/system/library/db/mysqli.php on line 7
+2017-08-06 10:10:22 - PHP Warning:  mysqli::mysqli(): Error while reading greeting packet. PID=1686 in /Users/armandas/Sites/orca/system/library/db/mysqli.php on line 7
+2017-08-06 10:10:22 - PHP Warning:  mysqli::mysqli(): (HY000/2006): MySQL server has gone away in /Users/armandas/Sites/orca/system/library/db/mysqli.php on line 7
+2017-08-06 10:10:22 - PHP Warning:  DB\MySQLi::__construct(): Couldn't fetch mysqli in /Users/armandas/Sites/orca/system/library/db/mysqli.php on line 10
+2017-08-06 10:10:22 - PHP Warning:  DB\MySQLi::__construct(): Couldn't fetch mysqli in /Users/armandas/Sites/orca/system/library/db/mysqli.php on line 10
+2017-08-06 10:10:22 - PHP Warning:  mysqli::mysqli(): MySQL server has gone away in /Users/armandas/Sites/orca/system/library/db/mysqli.php on line 7
+2017-08-06 10:10:22 - PHP Warning:  mysqli::mysqli(): Error while reading greeting packet. PID=1496 in /Users/armandas/Sites/orca/system/library/db/mysqli.php on line 7
+2017-08-06 10:10:22 - PHP Warning:  mysqli::mysqli(): (HY000/2006): MySQL server has gone away in /Users/armandas/Sites/orca/system/library/db/mysqli.php on line 7
+2017-08-06 10:10:22 - PHP Warning:  DB\MySQLi::__construct(): Couldn't fetch mysqli in /Users/armandas/Sites/orca/system/library/db/mysqli.php on line 10
+2017-08-06 10:10:22 - PHP Warning:  DB\MySQLi::__construct(): Couldn't fetch mysqli in /Users/armandas/Sites/orca/system/library/db/mysqli.php on line 10
