@@ -51,11 +51,20 @@ class ControllerExtensionModuleSpecialPrices extends Controller {
       $data['module_special_prices_status'] = $this->config->get('module_special_prices_status');
     }
 
-    $data['header'] = $this->load->controller('common/header');
-    $data['column_left'] = $this->load->controller('common/column_left');
-    $data['footer'] = $this->load->controller('common/footer');
+    // TODO finis edit output for module
+    //    $data['header'] = $this->load->controller('common/header');
+    //    $data['column_left'] = $this->load->controller('common/column_left');
+    //    $data['footer'] = $this->load->controller('common/footer');
 
     $this->response->setOutput($this->load->view('extension/module/special_prices', $data));
+  }
+
+  public function specialPrices() {
+    // TODO add real data
+    $data = '';
+
+    $this->response->setOutput($this->load->view('extension/module/special_prices', $data));
+
   }
 
   protected function validate() {

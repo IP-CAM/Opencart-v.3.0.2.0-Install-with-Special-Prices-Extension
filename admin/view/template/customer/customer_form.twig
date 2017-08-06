@@ -32,6 +32,8 @@
             <li><a href="#tab-transaction" data-toggle="tab">{{ tab_transaction }}</a></li>
             <li><a href="#tab-reward" data-toggle="tab">{{ tab_reward }}</a></li>
             <li><a href="#tab-ip" data-toggle="tab">{{ tab_ip }}</a></li>
+                {#TODO add translatable label#}
+            <li><a href="#tab-special-prices" data-toggle="tab">Import</a></li>
             {% endif %}
           </ul>
           <div class="tab-content">
@@ -886,6 +888,13 @@
                 <div id="ip"></div>
               </fieldset>
             </div>
+
+            <div class="tab-pane" id="tab-special-prices">
+              <fieldset>
+                <div id="special-prices"></div>
+              </fieldset>
+            </div>
+
           </div>
         </form>
       </div>
@@ -1330,6 +1339,13 @@
   });
 
   $('#ip').load('index.php?route=customer/customer/ip&user_token={{ user_token }}&customer_id={{ customer_id }}');
+
+  $('#special-prices').delegate('.pagination a', 'click', function(e) {
+      e.preventDefault();
+
+      $('#special-prices').load(this.href);
+  });
+  $('#special-prices').load('index.php?route=extension/module/special_prices/specialPrices&user_token={{ user_token }}&customer_id={{ customer_id }}');
 
   $('#content').delegate('button[id^=\'button-custom-field\'], button[id^=\'button-address\']', 'click', function() {
     var node = this;
