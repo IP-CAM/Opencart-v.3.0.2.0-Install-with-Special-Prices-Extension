@@ -1,4 +1,62 @@
 <legend>Special price list for a costumer <b>({{ customer_full_name }})</b></legend>
 <div class="panel-content">
-    <button class="btn btn-primary"><i class="fa fa-save"></i> Select (.csv) File</button>
+    <label for="upload" class="btn btn-primary"><i class="fa fa-save"></i> Select (.csv) File</label>
+    <input id="upload" type="file" name="file-upload" accept="text/csv">
 </div>
+
+
+<script>
+    var reader_offset = 0;		//current reader offset position
+    var buffer_size = 1024;
+    var pending_content = '';
+
+    function readAndSendChunk()
+    {
+        var reader = new FileReader();
+        var file = $('#upload')[0].files[0];
+        reader.onloadend = function(evt){
+
+            //check for end of file
+            if(evt.loaded == 0) return;
+
+            //increse offset value
+            reader_offset += evt.loaded;
+
+            //check for only complete line
+            var last_line_end = evt.target.result.lastIndexOf('\n');
+            var content = pending_content + evt.target.result.substring(0, last_line_end);
+
+            pending_content = evt.target.result.substring(last_line_end+1, evt.target.result.length);
+
+            //upload data
+            send(content);
+        };
+        var blob = file.slice(reader_offset, reader_offset + buffer_size);
+        reader.readAsText(blob);
+    }
+
+    /**
+     * Call ajax
+     */
+    function send(data_chank)
+    {
+        $.ajax({
+            url: "index.php?route=extension/module/special_prices/addProduct&user_token={{ user_token }}&customer_id={{ customer_id }}",
+            method: 'POST',
+            data: data_chank
+        }).done(function(response) {
+            console.log(response);
+        });
+    }
+
+    /**
+     * Events
+     */
+    $(function(){
+        $('#upload').change(function(){
+            reader_offset = 0;
+            pending_content = '';
+            readAndSendChunk();
+        });
+    });
+</script>
