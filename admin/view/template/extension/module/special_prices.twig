@@ -49,6 +49,9 @@
         {% endif %}
         </tbody>
     </table>
+    <div class="row">
+        <div class="col-sm-6 text-right">{{ results }}</div>
+    </div>
     {# Edit form #}
     <div id="special-product-edit-modal" class="modal fade" role="dialog">
         <div class="modal-dialog">
@@ -88,7 +91,7 @@
     var buffer_size = 1024;
     var pending_content = '';
 
-    function readAndSendChunk() {
+    function readCsvFile() {
         var reader = new FileReader();
         var file = $('#upload')[0].files[0];
         reader.onloadend = function (evt) {
@@ -106,7 +109,7 @@
             pending_content = evt.target.result.substring(last_line_end + 1, evt.target.result.length);
 
             //upload data
-            send(content);
+            addCustomerSpecialPrices(content);
         };
         var blob = file.slice(reader_offset, reader_offset + buffer_size);
         reader.readAsText(blob);
@@ -118,6 +121,18 @@
             method: 'POST',
         }).done(function (response) {
             $('#special-products-list').html(response);
+        });
+    }
+
+    function addCustomerSpecialPrices(content) {
+        $.ajax({
+            url: "index.php?route=extension/module/special_prices/deleteCustomerProducts&user_token={{ user_token }}&customer_id={{ customer_id }}",
+            method: 'POST'
+        }).done(function (response) {
+            var result = jQuery.parseJSON(response);
+            if (result.status === "success") {
+                send(content);
+            }
         });
     }
 
@@ -144,7 +159,7 @@
         $('#upload').change(function () {
             reader_offset = 0;
             pending_content = '';
-            readAndSendChunk();
+            readCsvFile();
         });
 
         $('.delete-special-product').click(function (event) {

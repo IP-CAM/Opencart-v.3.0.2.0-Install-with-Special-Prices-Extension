@@ -33,7 +33,7 @@ class ModelExtensionModuleSpecialPrices extends Model {
     return TRUE;
   }
 
-  public function getProducts($customer_id, $start = 0, $limit = 10) {
+  public function getProducts($customer_id, $start = 0, $limit = 1000) {
     if ($start < 0) {
       $start = 0;
     }
@@ -53,6 +53,17 @@ class ModelExtensionModuleSpecialPrices extends Model {
   public function deleteProduct($product_id, $customer_id) {
     try {
       $this->db->query("DELETE FROM `" . DB_PREFIX . "special_product` WHERE product_id = '" . $product_id . "' AND customer_id = '" . $customer_id . "'");
+    } catch (Exception $e) {
+      // TODO: catch exeption
+      // echo 'Caught exception: ',  $e->getMessage(), "\n";
+      return FALSE;
+    }
+    return TRUE;
+  }
+
+  public function deleteCustomerProducts($customer_id) {
+    try {
+      $this->db->query("DELETE FROM `" . DB_PREFIX . "special_product` WHERE customer_id = '" . $customer_id . "'");
     } catch (Exception $e) {
       // TODO: catch exeption
       // echo 'Caught exception: ',  $e->getMessage(), "\n";

@@ -76,40 +76,17 @@ class ControllerExtensionModuleSpecialPrices extends Controller {
       $data['customer_full_name'] = $customer_info['firstname'] . ' ' . $customer_info['lastname'];
     }
 
-    // TODO: add pagination
-    //    if (isset($this->request->get['page'])) {
-    //      $page = $this->request->get['page'];
-    //    }
-    //    else {
-    //      $page = 1;
-    //    }
+    // TODO: prepare pagination
+    if (isset($this->request->get['page'])) {
+      $page = $this->request->get['page'];
+    } else {
+      $page = 1;
+    }
 
-    $data['special_products'] = $this->model_extension_module_special_prices->getProducts($this->request->get['customer_id']);
+    $data['special_products'] = $this->model_extension_module_special_prices->getProducts($this->request->get['customer_id'], ($page - 1) * 10, 10);
 
-    //    $results = $this->model_customer_customer->getIps($this->request->get['customer_id'], ($page - 1) * 10, 10);
-
-    //    foreach ($results as $result) {
-    //      $data['ips'][] = array(
-    //        'ip'         => $result['ip'],
-    //        'total'      => $this->model_customer_customer->getTotalCustomersByIp($result['ip']),
-    //        'date_added' => date('d/m/y', strtotime($result['date_added'])),
-    //        'filter_ip'  => $this->url->link('customer/customer', 'user_token=' . $this->session->data['user_token'] . '&filter_ip=' . $result['ip'], true)
-    //      );
-    //    }
-    //
-    //    $ip_total = $this->model_customer_customer->getTotalIps($this->request->get['customer_id']);
-    //
-    //    $pagination = new Pagination();
-    //    $pagination->total = $ip_total;
-    //    $pagination->page = $page;
-    //    $pagination->limit = 10;
-    //    $pagination->url = $this->url->link('customer/customer/ip', 'user_token=' . $this->session->data['user_token'] . '&customer_id=' . $this->request->get['customer_id'] . '&page={page}', true);
-    //
-    //    $data['pagination'] = $pagination->render();
-    //
-    //    $data['results'] = sprintf($this->language->get('text_pagination'), ($ip_total) ? (($page - 1) * 10) + 1 : 0, ((($page - 1) * 10) > ($ip_total - 10)) ? $ip_total : ((($page - 1) * 10) + 10), $ip_total, ceil($ip_total / 10));
-    //
-    //    $this->response->setOutput($this->load->view('customer/customer_ip', $data));
+    $products_total = count($data['special_products']);
+    $data['results'] = sprintf($this->language->get('text_pagination'), ($products_total) ? (($page - 1) * 10) + 1 : 0, ((($page - 1) * 10) > ($products_total - 10)) ? $products_total : ((($page - 1) * 10) + 10), $products_total, ceil($products_total / 10));
 
 
     $this->response->setOutput($this->load->view('extension/module/special_prices', $data));
@@ -182,6 +159,19 @@ class ControllerExtensionModuleSpecialPrices extends Controller {
       if (isset($this->request->post['data'])) {
         $data = $this->request->post['data'];
         $this->model_extension_module_special_prices->editProduct($product_id, $customer_id, $data);
+        $response['status'] = 'success';
+      }
+    }
+    $this->response->setOutput(json_encode($response));
+  }
+
+  public function deleteCustomerProducts() {
+    $this->load->model('extension/module/special_prices');
+    $response['status'] = 'failed';
+    if (isset($this->request->get['customer_id'])) {
+      $customer_id = $this->request->get['customer_id'];
+      $isProductsDeleted = $this->model_extension_module_special_prices->deleteCustomerProducts($customer_id);
+      if($isProductsDeleted) {
         $response['status'] = 'success';
       }
     }
