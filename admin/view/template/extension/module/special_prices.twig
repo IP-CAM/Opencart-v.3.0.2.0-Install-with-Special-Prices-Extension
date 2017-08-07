@@ -5,11 +5,14 @@
         <input id="upload" class="hidden" type="file" name="file-upload" accept="text/csv">
     </div>
     <br>
-    {% set latest_product = special_products|first %}
-    <span>Latest import: {{ latest_product.timestamp|date("Y-m-d G:i:s") }} by <b>{{ latest_product.uploaded_by }}</b></span>
-    <br>
-    <br>
-    <br>
+    {% if special_products %}
+        {% set latest_product = special_products|first %}
+        <span>Latest import: {{ latest_product.timestamp|date("Y-m-d G:i:s") }}
+            by <b>{{ latest_product.uploaded_by }}</b></span>
+        <br>
+        <br>
+        <br>
+    {% endif %}
     <table class="table table-bordered table-hover">
         <thead>
         <tr>
@@ -27,9 +30,14 @@
                     <td class="text-right">{{ product.product_price }}</td>
                     <td class="text-right">{{ product.timestamp|date("Y-m-d G:i:s") }}</td>
                     <td class="text-right">
+                        <button class="product-edit-btn btn btn-primary" data-product-id="{{ product.product_id }}"
+                                data-product-price="{{ product.product_price }}" type="button"
+                                data-original-title="Delete" data-toggle="modal"
+                                data-target="#special-product-edit-modal">
+                            <i class="fa fa-pencil"></i>
+                        </button>
                         <button class="delete-special-product btn btn-danger" data-product-id="{{ product.product_id }}"
-                                type="button"
-                                data-original-title="Delete"><i class="fa fa-trash-o"></i>
+                                type="button" data-original-title="Delete"><i class="fa fa-trash-o"></i>
                         </button>
                     </td>
                 </tr>
@@ -41,6 +49,37 @@
         {% endif %}
         </tbody>
     </table>
+    {# Edit form #}
+    <div id="special-product-edit-modal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Edit product</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="product_id">Product EAN Code:</label>
+                        <input type="text" name="product_id" class="form-control" id="product_id_input">
+                    </div>
+                    <div class="form-group">
+                        <label for="product_price">Special Price (EUR):</label>
+                        <input type="text" name="product_price" class="form-control" id="product_price_input">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="special-product-edit-submit" type="button" class="btn btn-primary"><i
+                                class="fa fa-save"></i> Save
+                    </button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
 </div>
 
 
@@ -119,6 +158,38 @@
                 var result = jQuery.parseJSON(response);
                 if (result.status === "success") {
                     updateSpecialPriceList();
+                }
+            });
+        });
+
+        $('.product-edit-btn').click(function (event) {
+            productId = $(this).attr('data-product-id');
+            productPrice = $(this).attr('data-product-price');
+
+            $('#product_id_input').val(productId);
+            $('#product_price_input').val(productPrice);
+            $('#special-product-edit-submit').attr('data-product-id', productId);
+        });
+
+        $('#special-product-edit-submit').click(function (event) {
+            productId = $(this).attr('data-product-id');
+            var formData = {
+                "data":
+                    {
+                        'product_id': $('input[name=product_id]').val(),
+                        'product_price': $('input[name=product_price]').val()
+                    }
+            };
+            $.ajax({
+                url: "index.php?route=extension/module/special_prices/editProduct&user_token={{ user_token }}&product_id=" + productId + "&customer_id={{ customer_id }}",
+                method: 'POST',
+                data: formData,
+            }).done(function (response) {
+                var result = jQuery.parseJSON(response);
+                console.log(result);
+                if (result.status === "success") {
+                    updateSpecialPriceList();
+                    $('#special-product-edit-modal').modal('hide');
                 }
             });
 

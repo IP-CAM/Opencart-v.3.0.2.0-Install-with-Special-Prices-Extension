@@ -62,7 +62,7 @@ class ControllerExtensionModuleSpecialPrices extends Controller {
     $this->response->setOutput($this->load->view('extension/module/special_prices', $data));
   }
 
-    public function specialPrices() {
+  public function specialPrices() {
     $this->load->model('customer/customer');
     $this->load->model('extension/module/special_prices');
 
@@ -170,6 +170,22 @@ class ControllerExtensionModuleSpecialPrices extends Controller {
     else {
       $this->response->setOutput('{"status":"failed"}');
     }
+  }
+
+  public function editProduct() {
+    $this->load->model('extension/module/special_prices');
+    $response['status'] = 'failed';
+    if (isset($this->request->get['customer_id']) && isset($this->request->get['product_id'])) {
+      $customer_id = $this->request->get['customer_id'];
+      $product_id = $this->request->get['product_id'];
+
+      if (isset($this->request->post['data'])) {
+        $data = $this->request->post['data'];
+        $this->model_extension_module_special_prices->editProduct($product_id, $customer_id, $data);
+        $response['status'] = 'success';
+      }
+    }
+    $this->response->setOutput(json_encode($response));
   }
 
   protected function validate() {

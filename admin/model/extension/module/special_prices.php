@@ -46,6 +46,10 @@ class ModelExtensionModuleSpecialPrices extends Model {
     return $query->rows;
   }
 
+  public function editProduct($product_id, $customer_id, $data) {
+    $this->db->query("UPDATE " . DB_PREFIX . "special_product SET product_id = '" . $data['product_id'] . "', product_price = '" . $data['product_price'] . "' WHERE product_id = '" . (int) $product_id . "' AND customer_id = '" . (int) $customer_id . "'");
+  }
+
   public function deleteProduct($product_id, $customer_id) {
     try {
       $this->db->query("DELETE FROM `" . DB_PREFIX . "special_product` WHERE product_id = '" . $product_id . "' AND customer_id = '" . $customer_id . "'");
