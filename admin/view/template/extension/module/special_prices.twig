@@ -16,6 +16,7 @@
     <table class="table table-bordered table-hover">
         <thead>
         <tr>
+            <td class="text-right">Product Name</td>
             <td class="text-right">Product EAN Code</td>
             <td class="text-right">Special Price (EUR)</td>
             <td class="text-right">Date Added</td>
@@ -26,6 +27,7 @@
         {% if special_products %}
             {% for product in special_products %}
                 <tr>
+                    <td class="text-right">{{ product.product_link }}</td>
                     <td class="text-right">{{ product.product_id }}</td>
                     <td class="text-right">{{ product.product_price }}</td>
                     <td class="text-right">{{ product.timestamp|date("Y-m-d G:i:s") }}</td>

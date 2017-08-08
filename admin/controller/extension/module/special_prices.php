@@ -65,6 +65,7 @@ class ControllerExtensionModuleSpecialPrices extends Controller {
   public function specialPrices() {
     $this->load->model('customer/customer');
     $this->load->model('extension/module/special_prices');
+    $this->load->model('catalog/product');
 
     if (isset($this->request->get['customer_id'])) {
       $data['customer_id'] = $this->request->get['customer_id'];
@@ -79,15 +80,26 @@ class ControllerExtensionModuleSpecialPrices extends Controller {
     // TODO: prepare pagination
     if (isset($this->request->get['page'])) {
       $page = $this->request->get['page'];
-    } else {
+    }
+    else {
       $page = 1;
     }
 
     $data['special_products'] = $this->model_extension_module_special_prices->getProducts($this->request->get['customer_id'], ($page - 1) * 10, 10);
+    foreach ($data['special_products'] as $key => $product) {
+      $ean_code = $product['product_id'];
+      $productByEan = $this->model_extension_module_special_prices->findProductByEan($ean_code);
+      if ($productByEan) {
+        $product_id = $productByEan[0]['product_id'];
+        $product_description = $this->model_catalog_product->getProductDescriptions($product_id);
+        $product_name = $product_description[1]['name'];
+        $product_url = $this->url->link('catalog/product/edit', 'user_token=' . $this->session->data['user_token']. '&product_id='.$product_id, TRUE);
+        $data['special_products'][$key]['product_link'] = '<a href="' . $product_url . '">' . $product_name . '</a>';
+      }
+    }
 
     $products_total = count($data['special_products']);
     $data['results'] = sprintf($this->language->get('text_pagination'), ($products_total) ? (($page - 1) * 10) + 1 : 0, ((($page - 1) * 10) > ($products_total - 10)) ? $products_total : ((($page - 1) * 10) + 10), $products_total, ceil($products_total / 10));
-
 
     $this->response->setOutput($this->load->view('extension/module/special_prices', $data));
   }
@@ -108,13 +120,18 @@ class ControllerExtensionModuleSpecialPrices extends Controller {
       // TODO: add namespaces
       // 0 - product id
       // 1 - product price
-      if (is_numeric($csv_row[0]) && is_numeric($csv_row[1])) {
+      if (is_numeric($csv_row[0])) {
         $product = [
           'product_id' => $csv_row[0],
-          'product_price' => $csv_row[1],
           'customer_id' => $customer_id,
           'uploaded_by' => $this->user->getUserName(),
         ];
+        if (is_numeric($csv_row[1])) {
+          $product['product_price'] = $csv_row[1];
+        }
+        else {
+          $product['product_price'] = NULL;
+        }
         array_push($products, $product);
       }
     }
@@ -171,11 +188,15 @@ class ControllerExtensionModuleSpecialPrices extends Controller {
     if (isset($this->request->get['customer_id'])) {
       $customer_id = $this->request->get['customer_id'];
       $isProductsDeleted = $this->model_extension_module_special_prices->deleteCustomerProducts($customer_id);
-      if($isProductsDeleted) {
+      if ($isProductsDeleted) {
         $response['status'] = 'success';
       }
     }
     $this->response->setOutput(json_encode($response));
+  }
+
+  public function findProductByEan($ean_code) {
+
   }
 
   protected function validate() {

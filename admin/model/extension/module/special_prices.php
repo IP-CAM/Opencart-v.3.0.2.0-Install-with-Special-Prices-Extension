@@ -11,7 +11,7 @@ class ModelExtensionModuleSpecialPrices extends Model {
     try {
       $this->db->query("CREATE TABLE IF NOT EXISTS " . DB_PREFIX . "special_product (
         product_id int NOT NULL,
-        product_price decimal(8, 2) NOT NULL,
+        product_price decimal(8, 2),
         customer_id int NOT NULL,
         uploaded_by text NOT NULL,
         timestamp timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
@@ -71,5 +71,12 @@ class ModelExtensionModuleSpecialPrices extends Model {
     }
     return TRUE;
   }
+
+  public function findProductByEan($ean) {
+    $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "product WHERE ean = '" . (int) $ean . "' LIMIT 1");
+    return $query->rows;
+  }
+
+
 
 }
